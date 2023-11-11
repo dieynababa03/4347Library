@@ -21,10 +21,11 @@ public class Script {
 
         String header = br.readLine();
         String line;
+        line = br.readLine(); // Read the first line
 
         // Reading line by line
         while ((line = br.readLine()) != null) {
-          String[] values = line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+          String[] values = line.split("\t");
 
           // Inserting into Book table the ISBN as well as Title
           Statement insertionIntoBook = myConn.createStatement();
