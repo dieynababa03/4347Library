@@ -17,7 +17,7 @@ public class Script {
 
       // Reading book information from CSV file
       try (BufferedReader br = new BufferedReader(
-          new FileReader("/Users/dieynababa/4347Library/4347Library/TableInitializer/books_2.csv"))) {
+          new FileReader("/Users/dieynababa/4347Library/4347Library/src/TableInitializer/books_2.csv"))) {
 
         String header = br.readLine();
         String line;
