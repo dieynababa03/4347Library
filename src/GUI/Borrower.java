@@ -298,7 +298,7 @@ public class Borrower extends javax.swing.JFrame {
         }
         
         
-        try (Connection myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/library?allowMultiQueries=TRUE", "root", "JuggernautRB$21");
+        try (Connection myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/library?allowMultiQueries=TRUE", "team", "password");
             PreparedStatement preparedStatement = myConn.prepareStatement("INSERT INTO BORROWER VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);")) {
 
             preparedStatement.setString(1, generateID(getNumIds()+1));
@@ -354,7 +354,7 @@ public class Borrower extends javax.swing.JFrame {
         });
     }
     public boolean validateSSN() {
-        try (Connection myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/library?allowMultiQueries=TRUE", "root", "JuggernautRB$21");
+        try (Connection myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/library?allowMultiQueries=TRUE", "team", "password");
             PreparedStatement preparedStatement = myConn.prepareStatement("SELECT COUNT(*) FROM BORROWER WHERE Ssn = ?")) {
 
             preparedStatement.setString(1, jFormattedTextField2.getText());
@@ -373,7 +373,7 @@ public class Borrower extends javax.swing.JFrame {
     }
     
     public int getNumIds() {
-        try (Connection myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/library?allowMultiQueries=TRUE", "root", "JuggernautRB$21");
+        try (Connection myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/library?allowMultiQueries=TRUE", "team", "password");
             PreparedStatement preparedStatement = myConn.prepareStatement("SELECT COUNT(*) as row_count FROM BORROWER")) {
 
             try (ResultSet res = preparedStatement.executeQuery()) {
