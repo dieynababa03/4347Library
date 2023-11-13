@@ -312,7 +312,8 @@ public class Borrower extends javax.swing.JFrame {
             preparedStatement.setString(9, jFormattedTextField1.getValue().toString());
             
             preparedStatement.executeUpdate();
-
+            JOptionPane.showMessageDialog(null, "Success!");
+            
         } catch (SQLException e) {
             e.printStackTrace();
         }
