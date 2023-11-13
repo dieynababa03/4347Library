@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 
 public class BookLookup extends javax.swing.JFrame {
 
@@ -23,6 +24,7 @@ public class BookLookup extends javax.swing.JFrame {
      */
     public BookLookup() {
         initComponents();
+        setTable();
     }
 
     /**
@@ -100,6 +102,7 @@ public class BookLookup extends javax.swing.JFrame {
                 "ISBN", "Title", "Author", "Availability"
             }
         ));
+        jTable1.setRowHeight(30);
         jScrollPane2.setViewportView(jTable1);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -115,7 +118,7 @@ public class BookLookup extends javax.swing.JFrame {
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 335, Short.MAX_VALUE)))
+                        .addGap(0, 592, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -193,6 +196,13 @@ public class BookLookup extends javax.swing.JFrame {
                 new BookLookup().setVisible(true);
             }
         });
+        
+    }
+    public void setTable(){
+        TableColumnModel columnModel = jTable1.getColumnModel();
+        columnModel.getColumn(1).setPreferredWidth(300);
+        columnModel.getColumn(2).setPreferredWidth(200);
+        
     }
 
     public void performQuery(String searchValue) {
@@ -201,44 +211,45 @@ public class BookLookup extends javax.swing.JFrame {
             Connection myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Library?allowMultiQueries=TRUE", "team",
                     "password");
             Statement search = myConn.createStatement();
-            String queryStatementAuthor = "SELECT BOOK.Isbn, AUTHORS.Name, BOOK.Title "
-                    + "FROM AUTHORS "
-                    + "INNER JOIN BOOK_AUTHORS ON AUTHORS.Author_id = BOOK_AUTHORS.Author_id "
-                    + "INNER JOIN BOOK ON BOOK_AUTHORS.ISBN = BOOK.ISBN "
-                    + "WHERE AUTHORS.Name LIKE '%" + searchValue + "%';";
+            String queryStatementAuthor = "SELECT BOOK.Isbn, GROUP_CONCAT(AUTHORS.Name SEPARATOR ', ') AS AuthorsName, BOOK.Title "
+                + "FROM AUTHORS "
+                + "INNER JOIN BOOK_AUTHORS ON AUTHORS.Author_id = BOOK_AUTHORS.Author_id "
+                + "INNER JOIN BOOK ON BOOK_AUTHORS.ISBN = BOOK.ISBN "
+                + "WHERE AUTHORS.Name LIKE '%" + searchValue + "%' " +
+                "GROUP BY BOOK.Isbn;";
             ResultSet res = search.executeQuery(queryStatementAuthor);
 
             while (res.next()) {
-                String name = res.getString("Name");
+                String name = res.getString("AuthorsName");
                 String isbn = res.getString("Isbn");
                 String title = res.getString("Title");
 
                 model.addRow(new Object[]{isbn, title, name, "available"});
             }
-            String queryStatementTitle = "SELECT BOOK.Isbn, AUTHORS.Name, BOOK.Title "
-                    + "FROM AUTHORS "
-                    + "INNER JOIN BOOK_AUTHORS ON AUTHORS.Author_id = BOOK_AUTHORS.Author_id "
-                    + "INNER JOIN BOOK ON BOOK_AUTHORS.ISBN = BOOK.ISBN "
-                    + "WHERE BOOK.Title LIKE '%" + searchValue + "%';";
+            String queryStatementTitle = "SELECT BOOK.Isbn, GROUP_CONCAT(AUTHORS.Name SEPARATOR ', ') AS AuthorsName, BOOK.Title "
+                + "FROM AUTHORS "
+                + "INNER JOIN BOOK_AUTHORS ON AUTHORS.Author_id = BOOK_AUTHORS.Author_id "
+                + "INNER JOIN BOOK ON BOOK_AUTHORS.ISBN = BOOK.ISBN "
+                + "WHERE BOOK.Title LIKE '%" + searchValue + "%' " +
+                "GROUP BY BOOK.Isbn;";
             ResultSet res2 = search.executeQuery(queryStatementTitle);
-
             while (res2.next()) {
-                String name = res2.getString("Name");
+                String name = res2.getString("AuthorsName");
                 String isbn = res2.getString("Isbn");
                 String title = res2.getString("Title");
 
                 model.addRow(new Object[]{isbn, title, name, "available"});
 
             }
-            String queryStatementIsbn = "SELECT BOOK.Isbn, AUTHORS.Name, BOOK.Title "
-                    + "FROM AUTHORS "
-                    + "INNER JOIN BOOK_AUTHORS ON AUTHORS.Author_id = BOOK_AUTHORS.Author_id "
-                    + "INNER JOIN BOOK ON BOOK_AUTHORS.ISBN = BOOK.ISBN "
-                    + "WHERE BOOK.Isbn LIKE '%" + searchValue + "%';";
+            String queryStatementIsbn = "SELECT BOOK.Isbn, GROUP_CONCAT(AUTHORS.Name SEPARATOR ', ') AS AuthorsName, BOOK.Title "
+                + "FROM AUTHORS "
+                + "INNER JOIN BOOK_AUTHORS ON AUTHORS.Author_id = BOOK_AUTHORS.Author_id "
+                + "INNER JOIN BOOK ON BOOK_AUTHORS.ISBN = BOOK.ISBN "
+                + "WHERE BOOK.Isbn LIKE '%" + searchValue + "%' " +
+                "GROUP BY BOOK.Isbn;";
             ResultSet res3 = search.executeQuery(queryStatementIsbn);
-
             while (res3.next()) {
-                String name = res3.getString("Name");
+                String name = res3.getString("AuthorsName");
                 String isbn = res3.getString("Isbn");
                 String title = res3.getString("Title");
 
