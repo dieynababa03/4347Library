@@ -61,6 +61,25 @@ public class Script {
             insertionIntoBookAuthors.executeUpdate(insertionIntoBookAuthorsQuery);
           } 
         }
+        
+      BufferedReader br2 = new BufferedReader(new FileReader("/Users/dieynababa/4347Library/4347Library/src/TableInitializer/borrowers.csv"));
+      br2.readLine();
+      while ((line = br2.readLine()) != null) {
+            String[] values2 = line.split(",");
+            PreparedStatement preparedStatement = myConn.prepareStatement("INSERT INTO BORROWER VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);");
+
+            preparedStatement.setString(1, values2[0]);
+            preparedStatement.setString(2, values2[1]);
+            preparedStatement.setString(3, values2[2]);
+            preparedStatement.setString(4, values2[3]);
+            preparedStatement.setString(5, values2[5]);
+            preparedStatement.setString(6, values2[6]);
+            preparedStatement.setString(7, values2[7]);
+            preparedStatement.setString(8, values2[4]);
+            preparedStatement.setString(9, values2[8]);
+
+            preparedStatement.executeUpdate(); 
+      }
       } catch (FileNotFoundException e) {
         System.out.println("Error");
         e.printStackTrace();
