@@ -13,7 +13,7 @@ public class Script {
 
       // Reading book information from CSV file
       try (BufferedReader br = new BufferedReader(
-          new FileReader("books.csv"))) {
+          new FileReader("src/TableInitializer/books.csv"))) {
 
         String header = br.readLine();
         String line;
@@ -58,7 +58,7 @@ public class Script {
           } 
         }
         
-      BufferedReader br2 = new BufferedReader(new FileReader("borrowers.csv"));
+      BufferedReader br2 = new BufferedReader(new FileReader("src/TableInitializer/borrowers.csv"));
       br2.readLine();
       while ((line = br2.readLine()) != null) {
             String[] values2 = line.split(",");
