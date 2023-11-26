@@ -1,23 +1,19 @@
 package TableInitializer;
 
+import GUI.DatabaseManager;
 import java.io.*;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
 
 public class Script {
   public static void main(String[] args) throws IOException {
     try {
       // Establishing JDBC connection to make changes to DB
       // Like insertions
-      Connection myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Library", "team",
-          "password");
+      Connection myConn = DatabaseManager.getConnection();
 
       // Reading book information from CSV file
       try (BufferedReader br = new BufferedReader(
-          new FileReader("/Users/dieynababa/4347Library/4347Library/src/TableInitializer/books_2.csv"))) {
+          new FileReader("books.csv"))) {
 
         String header = br.readLine();
         String line;
@@ -62,7 +58,7 @@ public class Script {
           } 
         }
         
-      BufferedReader br2 = new BufferedReader(new FileReader("/Users/dieynababa/4347Library/4347Library/src/TableInitializer/borrowers.csv"));
+      BufferedReader br2 = new BufferedReader(new FileReader("borrowers.csv"));
       br2.readLine();
       while ((line = br2.readLine()) != null) {
             String[] values2 = line.split(",");
@@ -88,5 +84,8 @@ public class Script {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+}
+
   }
 }
