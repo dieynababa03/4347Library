@@ -22,6 +22,8 @@ public class BookLookup extends javax.swing.JFrame {
     /**
      * Creates new form BookLookup
      */
+    private Connection myConn;
+    
     public BookLookup() {
         initComponents();
         try { 
