@@ -24,6 +24,11 @@ public class BookLookup extends javax.swing.JFrame {
      */
     public BookLookup() {
         initComponents();
+        try { 
+            myConn = DatabaseManager.getConnection();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
         setTable();
     }
 
@@ -208,8 +213,6 @@ public class BookLookup extends javax.swing.JFrame {
     public void performQuery(String searchValue) {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         try {
-            Connection myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Library?allowMultiQueries=TRUE", "team",
-                    "password");
             Statement search = myConn.createStatement();
             String queryStatementAuthor = "SELECT BOOK.Isbn, GROUP_CONCAT(AUTHORS.Name SEPARATOR ', ') AS AuthorsName, BOOK.Title "
                 + "FROM AUTHORS "
