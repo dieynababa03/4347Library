@@ -22,15 +22,8 @@ public class BookLookup extends javax.swing.JFrame {
     /**
      * Creates new form BookLookup
      */
-    private Connection myConn;
-    
     public BookLookup() {
         initComponents();
-        try { 
-            myConn = DatabaseManager.getConnection();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
         setTable();
     }
 
@@ -211,10 +204,31 @@ public class BookLookup extends javax.swing.JFrame {
         columnModel.getColumn(2).setPreferredWidth(200);
         
     }
+    
+    private boolean isBookAvailable(String isbn) {
+    try (Connection myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/library?allowMultiQueries=TRUE", "team", "password")) {
+        String availabilityQuery = "SELECT COUNT(*) FROM BOOK_LOANS WHERE Isbn = ? AND Date_in IS NULL";
+        try (PreparedStatement availabilityStatement = myConn.prepareStatement(availabilityQuery)) {
+            availabilityStatement.setString(1, isbn);
+            try (ResultSet resultSet = availabilityStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    // Check if there are no outstanding loans (Date_in is NULL)
+                    boolean isAvailable = resultSet.getInt(1) == 0;
+                    return isAvailable;
+                }
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();  // Print the exception details for debugging
+    }
+    return false;
+}
 
     public void performQuery(String searchValue) {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         try {
+            Connection myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/library?allowMultiQueries=TRUE", "team",
+                    "password");
             Statement search = myConn.createStatement();
             String queryStatementAuthor = "SELECT BOOK.Isbn, GROUP_CONCAT(AUTHORS.Name SEPARATOR ', ') AS AuthorsName, BOOK.Title "
                 + "FROM AUTHORS "
@@ -228,8 +242,9 @@ public class BookLookup extends javax.swing.JFrame {
                 String name = res.getString("AuthorsName");
                 String isbn = res.getString("Isbn");
                 String title = res.getString("Title");
+                String availability = isBookAvailable(isbn) ? "available" : "unavailable";
 
-                model.addRow(new Object[]{isbn, title, name, "available"});
+                model.addRow(new Object[]{isbn, title, name, availability});
             }
             String queryStatementTitle = "SELECT BOOK.Isbn, GROUP_CONCAT(AUTHORS.Name SEPARATOR ', ') AS AuthorsName, BOOK.Title "
                 + "FROM AUTHORS "
