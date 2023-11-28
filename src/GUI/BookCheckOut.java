@@ -196,9 +196,6 @@ public class BookCheckOut extends javax.swing.JFrame {
         String title = getBookTitle(isbn);
         selectedBooksMessage.append("ISBN: ").append(isbn).append(", Title: ").append(title).append("\n");
     }
-    
-    // Show the selected books information
-    JOptionPane.showMessageDialog(this, selectedBooksMessage.toString(), "Selected Books", JOptionPane.INFORMATION_MESSAGE);
 
     // Display the information for all selected books
     String cardId = JOptionPane.showInputDialog(this, selectedBooksMessage.toString() + "\nEnter your Card ID:");
